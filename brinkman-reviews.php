@@ -125,18 +125,28 @@ function get_genre_filters()
     if( $terms ):
         $filters_html = '<ul id="show_filters">';
 
+        $filters_html .= '<li class="show-all"><input type="checkbox" id="term_all" checked><label for="term_all">All Shows</label></li>';
+
         foreach( $terms as $term )
         {
             $term_id = $term->term_id;
             $term_name = $term->name;
 
-            $filters_html .= '<li class="term_id_'.$term_id.'"><input type="checkbox" name="show_filter[]" id="term_'.$term_id.'" value="'.$term_id.'"><label for="term_'.$term_id.'">'.$term_name.'</label></li>';
+          if($term_name !== "FEATURED"){
+            $filters_html .= '<li class="filter term_id_'.$term_id.'"><input type="checkbox" name="show_filter[]" id="term_'.$term_id.'" value="'.lowDash($term_name).'"><label for="term_'.$term_id.'">'.$term_name.'</label></li>';
+          }
         }
-        $filters_html .= '<li class="show-all"><input type="checkbox" id="term_all"><label for="term_all">Show All</label></li>';
+
         $filters_html .= '</ul>';
 
         return $filters_html;
     endif;
+}
+
+
+/* UTILTIIES */
+function lowDash($value){
+  return strtolower(preg_replace('/[[:space:]]+/', '-', $value));
 }
 
 

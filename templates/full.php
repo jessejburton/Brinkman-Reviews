@@ -29,7 +29,7 @@
   <?php echo $add_class; ?>
   <?php
     foreach(get_the_terms($post, 'shows') as $show){
-      echo strtolower(preg_replace('/[[:space:]]+/', '-', $show->name)) . ' ';
+      echo lowDash($show->name) . ' ';
     }
   ?>
   "

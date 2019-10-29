@@ -77,9 +77,12 @@
   animation: showReview;
   animation-fill-mode: forwards;
   animation-duration: 2s;
-  animation-delay: 2s;
   overflow: hidden;
   color: inherit;
+}
+
+.review__full.hide {
+  display: none;
 }
 
 .review__full::after {
@@ -256,6 +259,9 @@
 #show_filters input[type=checkbox]:checked + label {
   transform: scale(1.05);
   box-shadow: 0 0 15px 3px rgba(0,0,0,.1);
+}
+
+#show_filters input[type=checkbox]:checked + label {
   background-color: #dd3333;
 }
 

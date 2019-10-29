@@ -29,7 +29,7 @@ extract($fp_options);
 
        <h2>PRESS</h2>
 
-       <div id="show-filters-container">
+       <div id="show-filters-containers">
           <?php echo get_genre_filters(); ?>
        </div>
 

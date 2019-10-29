@@ -24,7 +24,17 @@
 
 ?>
 
-<a class="review__full <?php echo $add_class; ?>" href="<?php echo the_field('article_link'); ?>">
+<a
+  class="review__full
+  <?php echo $add_class; ?>
+  <?php
+    foreach(get_the_terms($post, 'shows') as $show){
+      echo strtolower(preg_replace('/[[:space:]]+/', '-', $show->name)) . ' ';
+    }
+  ?>
+  "
+  href="<?php echo the_field('article_link'); ?>"
+>
 
   <?php if(has_post_thumbnail()){ ?>
     <div class="review__thumbnail"><?php the_post_thumbnail( 'medium' ); ?></div>
@@ -43,9 +53,11 @@
     ?>
   </span>
 
-  <span class="review__date">
-    <?php echo $review__date; ?>
-  </span>
+  <?php if(trim($review_date) !== ""){ ?>
+    <span class="review__date">
+      <?php echo date('F Y', strtotime($review_date)); ?>
+    </span>
+  <?php } ?>
 
   <span class="review__more">
     view more <span class="arrow"></span>

@@ -15,6 +15,7 @@ Author: Jesse James Burton
 Author URI: https://www.burtonmediainc.com
 License: GPLv2 or Later
 Text Domain: brinkman-reviews
+GIT: https://github.com/jessejburton/Brinkman-Reviews
 */
 
 /* Include Styles */
@@ -22,6 +23,12 @@ function add_review_plugin_styles() {
   wp_enqueue_style( 'brinkman-reviews-styles', plugins_url('brinkman-reviews.css',__FILE__ ), array(), '1.1', 'all');
 }
 add_action( 'wp_enqueue_scripts', 'add_review_plugin_styles' );
+
+/* Include Scripts */
+function add_review_plugin_script() {
+  wp_enqueue_script( 'brinkman-reviews-scripts', plugins_url('brinkman-reviews.js',__FILE__ ), array(), '1.1', 'all', false);
+}
+add_action( 'wp_enqueue_scripts', 'add_review_plugin_script' );
 
 /**
  * Register review shortcode

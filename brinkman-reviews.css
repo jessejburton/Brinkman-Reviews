@@ -64,6 +64,15 @@
   margin: 2.5rem 0;
 }
 
+.reviews-grid .review {
+  transition: all 1s ease;
+}
+
+.reviews-grid .review:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 15px 0 rgba(0,0,0,.1);
+}
+
 .review__full {
   display: block;
   background-color: #2A2A2A;
@@ -71,14 +80,45 @@
   transition: all .3s ease;
   cursor: pointer;
   position: relative;
-  opacity: 0;
-  max-height: 0;
+  height: 100%;
   min-width: 200px;
   animation: showReview;
   animation-fill-mode: forwards;
   animation-duration: 2s;
   overflow: hidden;
   color: inherit;
+}
+
+.row-item-1 {
+  animation-delay: 0;
+}
+.row-item-2 {
+  animation-delay: 300ms;
+}
+.row-item-3 {
+  animation-delay: 600ms;
+}
+.row-item-4 {
+  animation-delay: 900ms;
+}
+
+@keyframes showReview {
+  0% {
+    opacity: 0;
+    max-height: 0;
+    transform: translateY(20px) scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px 0 rgba(0,0,0,.1);
+  }
+
+  100% {
+    opacity: 1;
+    max-height: 2000px;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .review__full.hide {
@@ -182,10 +222,6 @@
   font-weight: 400;
 }
 
-.review__full:hover {
-  background-color: #1C1C1C;
-}
-
 .review__full .review__link {
   color: white;
   font-weight: bold;
@@ -214,17 +250,61 @@
   transform: translateY(-50%);
 }
 
-@keyframes showReview {
-  0% {
-    opacity: 0;
-    max-height: 0;
-  }
+/* LOADING BARS */
 
-  100% {
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px 0;
+}
+
+.loading .loading__bar {
+  margin: 0 5px;
+  border-radius: 2px;
+  background-color: rgba(255,255,255,0.2);
+  animation-name: bars;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+
+.loading .loading__bar--4 {
+  width: 8px;
+  height: 30px;
+}
+
+.loading .loading__bar--3,
+.loading .loading__bar--5 {
+  width: 6px;
+  height: 25px;
+  animation-delay: .2s;
+}
+.loading .loading__bar--2,
+.loading .loading__bar--6 {
+  width: 4px;
+  height: 20px;
+  animation-delay: .4s;
+}
+.loading .loading__bar--1,
+.loading .loading__bar--7 {
+  width: 2px;
+  height: 10px;
+  animation-delay: .6s;
+}
+
+@keyframes bars {
+  0% {
     opacity: 1;
-    max-height: 2000px;
+  }
+  4% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 0;
   }
 }
+
+/* REVIEWS */
 
 #show-filters-container {
   margin: 25px 0;
@@ -268,3 +348,4 @@
 #show_filters li input {
   display: none;
 }
+

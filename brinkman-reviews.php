@@ -30,6 +30,37 @@ function add_review_plugin_script() {
 }
 add_action( 'wp_enqueue_scripts', 'add_review_plugin_script' );
 
+function get_reviews( $data ) {
+
+	// setup query argument
+	$args = array(
+    "posts_per_page"   => 4,
+    "paged"            => $data['page'],
+    'post_type'        => 'reviews'
+	);
+
+	// get posts
+	$posts = get_posts($args);
+
+	// add custom field data to posts array
+	foreach ($posts as $key => $post) {
+      $posts[$key]->acf = get_fields($post->ID);
+      $posts[$key]->review_date = date('F Y', strtotime(get_field('review_date', $post->ID, false, false)));
+			$posts[$key]->link = get_permalink($post->ID);
+			$posts[$key]->image = get_the_post_thumbnail_url($post->ID);
+			$posts[$key]->shows = get_the_terms($post, 'shows');
+	}
+	return $posts;
+}
+
+// register the endpoint
+add_action( 'rest_api_init', function(){
+	register_rest_route( 'bababrinkman/v1', '/reviews/(?P<page>\d+)', array(
+		'methods' => 'GET',
+    'callback' => 'get_reviews'
+	));
+});
+
 /**
  * Register review shortcode
  *
@@ -116,8 +147,8 @@ function reviews_template( $template ) {
 add_filter('template_include', 'reviews_template');
 
 /* STARTING TO ADD FUNCTIONALITY FOR AJAX FILTERING */
-//Get Genre Filters
-function get_genre_filters()
+//Get show Filters
+function get_show_filters()
 {
     $terms = get_terms('shows');
     $filters_html = false;
@@ -131,9 +162,10 @@ function get_genre_filters()
         {
             $term_id = $term->term_id;
             $term_name = $term->name;
+            $term_slug = $term->slug;
 
           if($term_name !== "FEATURED"){
-            $filters_html .= '<li class="filter term_id_'.$term_id.'"><input type="checkbox" name="show_filter[]" id="term_'.$term_id.'" value="'.lowDash($term_name).'"><label for="term_'.$term_id.'">'.$term_name.'</label></li>';
+            $filters_html .= '<li class="filter term_id_'.$term_id.'"><input type="checkbox" name="show_filter[]" id="term_'.$term_id.'" value="'.$term_slug.'"><label for="term_'.$term_id.'">'.$term_name.'</label></li>';
           }
         }
 
@@ -149,6 +181,4 @@ function lowDash($value){
   return strtolower(preg_replace('/[[:space:]]+/', '-', $value));
 }
 
-
 ?>
-

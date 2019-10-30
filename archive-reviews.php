@@ -30,14 +30,19 @@ extract($fp_options);
        <h2>PRESS</h2>
 
        <div id="show-filters-containers">
-          <?php echo get_genre_filters(); ?>
+          <?php echo get_show_filters(); ?>
        </div>
 
-      <div class="reviews-grid">
-
-        <?php echo do_shortcode('[reviews display="full"]'); ?>
-
-      </div><!--/reviews-grid-->
+      <div class="reviews-grid"></div><!--/reviews-grid-->
+      <div class="loading">
+        <span class="loading__bar loading__bar--1"></span>
+        <span class="loading__bar loading__bar--2"></span>
+        <span class="loading__bar loading__bar--3"></span>
+        <span class="loading__bar loading__bar--4"></span>
+        <span class="loading__bar loading__bar--5"></span>
+        <span class="loading__bar loading__bar--6"></span>
+        <span class="loading__bar loading__bar--7"></span>
+      </div><!--/loading-review-->
 
 		</div><!--/row-->
 

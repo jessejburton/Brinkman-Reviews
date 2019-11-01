@@ -1,17 +1,23 @@
 // Find out if the div exists
 const FILTERS = document.querySelectorAll('.filter input[type=checkbox]');
-const REVIEWS = document.querySelectorAll('.review__full');
 const REVIEW_GRID = document.querySelector(".reviews-grid");
 const LOADER = document.querySelector(".loading");
 
-// add change handlers to the checkboxes
-FILTERS.forEach(filter => {
-  filter.addEventListener("change", updateSelectedFilters);
-});
+if (FILTERS.length) {
+  // add change handlers to the checkboxes
+  FILTERS.forEach(filter => {
+    filter.addEventListener("change", updateSelectedFilters);
+  });
 
-document.getElementById("term_all").addEventListener("change", (e) => {
-  displayReviews(e.target.checked);
-});
+  document.getElementById("term_all").addEventListener("change", (e) => {
+    displayReviews(e.target.checked);
+  });
+}
+
+function updateSelectedFilters() {
+  let selectedFilters = getSelectedFilters();
+  showFilters(selectedFilters);
+}
 
 function getSelectedFilters() {
   let selectedFilters = [];
@@ -24,12 +30,9 @@ function getSelectedFilters() {
   return selectedFilters;
 }
 
-function updateSelectedFilters() {
-  let selectedFilters = getSelectedFilters();
-  showFilters(selectedFilters);
-}
-
 function displayReviews(display) {
+  let REVIEWS = document.querySelectorAll('.review');
+
   if (display) {
     REVIEWS.forEach(review => {
       review.classList.remove("hide");
@@ -46,6 +49,8 @@ function displayReviews(display) {
 }
 
 function showFilters(filters) {
+  let REVIEWS = document.querySelectorAll('.review');
+
   if (filters.length > 0) {
     document.getElementById("term_all").checked = false;
   }
@@ -78,6 +83,11 @@ function getShowsByPage(page) {
   const request = async () => {                 // async function always returns a promise
     const reviews = await getShows(page);          // await can be only used inside async functions
     showReviews(reviews);
+    if (reviews.length === 0) {
+      LOADER.style.display = "none";
+      document.removeEventListener("scroll", checkLoadMore);
+      console.log("all reviews loaded");
+    }
   }
   request().catch((error) => { alert(error) }); // catch rejected promise
 }
@@ -94,12 +104,10 @@ function isLoaderInView() {
 
   return (vertInView && horInView);
 }
-
-const handleScroll = document.addEventListener("scroll", () => {
-  checkLoadMore();
-});
+document.addEventListener("scroll", checkLoadMore);
 
 function checkLoadMore() {
+  console.log("scrolling");
   if (isLoaderInView()) {
     getShowsByPage(page);
     page++;
@@ -130,9 +138,9 @@ function createReview(review, index) {
   if (Math.floor(rating) !== rating) a.classList.add("half");
   a.href = review.link;
 
-  // Add a class for each show slug for filtering.
+  // SLUG
   for (show in review.shows) {
-    a.classList.add(review.shows[show].slug);
+    div.classList.add(review.shows[show].slug);
   }
 
   // THUMBNAIL

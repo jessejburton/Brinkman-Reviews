@@ -121,7 +121,7 @@
   }
 }
 
-.review__full.hide {
+.review.hide {
   display: none;
 }
 
@@ -259,10 +259,18 @@
   padding: 50px 0;
 }
 
+.loading .loading__text {
+  position: absolute;
+  text-transform: uppercase;
+  font-size: 10px;
+  z-index: 5000;
+  opacity: 0;
+}
+
 .loading .loading__bar {
   margin: 0 5px;
   border-radius: 2px;
-  background-color: rgba(255,255,255,0.2);
+  background-color: #dd3333;
   animation-name: bars;
   animation-duration: 2s;
   animation-iteration-count: infinite;
@@ -297,7 +305,7 @@
     opacity: 1;
   }
   4% {
-    opacity: 0.3;
+    opacity: 0.5;
   }
   100% {
     opacity: 0;

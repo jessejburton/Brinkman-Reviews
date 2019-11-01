@@ -35,6 +35,7 @@ extract($fp_options);
 
       <div class="reviews-grid"></div><!--/reviews-grid-->
       <div class="loading">
+        <span class="loading__text">loading</span>
         <span class="loading__bar loading__bar--1"></span>
         <span class="loading__bar loading__bar--2"></span>
         <span class="loading__bar loading__bar--3"></span>

@@ -3,7 +3,7 @@ const FILTERS = document.querySelectorAll('.filter input[type=checkbox]');
 const REVIEW_GRID = document.querySelector(".reviews-grid");
 const LOADER = document.querySelector(".loading");
 
-if (FILTERS.length) {
+if (FILTERS.length > 0) {
   // add change handlers to the checkboxes
   FILTERS.forEach(filter => {
     filter.addEventListener("change", updateSelectedFilters);
@@ -12,6 +12,9 @@ if (FILTERS.length) {
   document.getElementById("term_all").addEventListener("change", (e) => {
     displayReviews(e.target.checked);
   });
+
+  // Check if we need to load more reviews
+  checkLoadMore();
 }
 
 function updateSelectedFilters() {
@@ -113,7 +116,6 @@ function checkLoadMore() {
     page++;
   }
 }
-checkLoadMore();
 
 function showReviews(reviews) {
   reviews.map((review, index) => {

@@ -2,6 +2,7 @@
 const FILTERS = document.querySelectorAll('.filter input[type=checkbox]');
 const REVIEW_GRID = document.querySelector(".reviews-grid");
 const LOADER = document.querySelector(".loading");
+let page = 1;
 
 if (FILTERS.length > 0) {
   // add change handlers to the checkboxes
@@ -15,6 +16,7 @@ if (FILTERS.length > 0) {
 
   // Check if we need to load more reviews
   checkLoadMore();
+  document.addEventListener("scroll", checkLoadMore);
 }
 
 function updateSelectedFilters() {
@@ -94,7 +96,6 @@ function getShowsByPage(page) {
   }
   request().catch((error) => { alert(error) }); // catch rejected promise
 }
-let page = 1;
 
 function isLoaderInView() {
   const rect = LOADER.getBoundingClientRect();
@@ -107,7 +108,6 @@ function isLoaderInView() {
 
   return (vertInView && horInView);
 }
-document.addEventListener("scroll", checkLoadMore);
 
 function checkLoadMore() {
   console.log("scrolling");

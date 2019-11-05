@@ -125,6 +125,11 @@
   display: none;
 }
 
+.review.highlight {
+  display: block;
+  background-color: red;
+}
+
 .review__full::after {
   display: block;
   position: absolute;

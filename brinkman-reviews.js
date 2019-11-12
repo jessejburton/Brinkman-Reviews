@@ -60,13 +60,11 @@ function showAllReviews(show) {
   allFilters = filters.checked.concat(filters.unchecked);
 
   if (show) {
-    console.log(show);
     filterReviews({
       checked: allFilters,
       unchecked: []
     });
   } else {
-    console.log(show);
     filterReviews({
       checked: [],
       unchecked: allFilters
@@ -107,7 +105,7 @@ function getReviews(page) {
             image: review.image,
             title: review.post_title,
             content: review.post_content,
-            date: review.acf.review_date
+            date: review.review_date
           }
         });
         resolve(reviews);
@@ -233,7 +231,7 @@ function createReview(review, index) {
   a.append(review_rating);
 
   // REVIEW DATE
-  if (review.date && review.date.length > 0) {
+  if (review.date && review.date.length > 0 && review.date.toUpperCase() !== 'JANUARY 1999') {
     var review_date = document.createElement("span");
     review_date.classList.add("review__date");
     review_date.innerHTML = review.date;
@@ -253,7 +251,6 @@ function createReview(review, index) {
   let filters = getFilters();
   if (filters.checked.length > 0) {
     for (show in review.shows) {
-      console.log(review.shows[show].slug);
       if (filters.unchecked.includes(review.shows[show].slug)) {
         div.classList.add("hide");
       }
@@ -270,8 +267,6 @@ function createReview(review, index) {
 function isLoaderInView() {
   const rectTop = getOffsetTop(LOADER);
   const scrollBottom = window.innerHeight + (window.pageYOffset || document.documentElement.scrollTop);
-
-  console.log(scrollBottom);
 
   return scrollBottom + window.innerHeight > rectTop;
 }

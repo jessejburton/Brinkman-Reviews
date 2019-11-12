@@ -36,19 +36,22 @@ function get_reviews( $data ) {
 	$args = array(
     "posts_per_page"   => 20,
     "paged"            => $data['page'],
-    'post_type'        => 'reviews'
-	);
+    'post_type'        => 'reviews',
+    'meta_key'			   => 'review_date',
+    'orderby'			     => 'meta_value'
+  );
 
 	// get posts
 	$posts = get_posts($args);
 
 	// add custom field data to posts array
 	foreach ($posts as $key => $post) {
+
       $posts[$key]->acf = get_fields($post->ID);
       $posts[$key]->review_date = date('F Y', strtotime(get_field('review_date', $post->ID, false, false)));
 			$posts[$key]->link = get_field('article_link', $post->ID, false, false);
 			$posts[$key]->image = get_the_post_thumbnail_url($post->ID);
-			$posts[$key]->shows = get_the_terms($post, 'shows');
+      $posts[$key]->shows = get_the_terms($post, 'shows');
 	}
 	return $posts;
 }

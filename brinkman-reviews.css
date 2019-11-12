@@ -2,11 +2,6 @@
   margin: 20px 0;
 }
 
-.review .review__quote p::before,
-.review .review__quote p::after {
-   content: '"';
-}
-
 .half .review__rating:after {
   content: '1/2';
 }

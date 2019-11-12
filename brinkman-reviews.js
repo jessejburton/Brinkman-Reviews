@@ -131,11 +131,13 @@ function getNextReviews() {
     fetchedPages.push(page);
     page++;
 
+    // Display the new reviews
+    showReviews(reviews);
+
     // Add reviews to review_array
     reviews.map(review => {
       review_array.push(review);
     });
-    showReviews(review_array);
 
     // Stop fetching if all reviews have loaded
     if (reviews.length === 0) {
@@ -158,7 +160,6 @@ function allReviewsLoaded() {
  * Loop and display reviews
  ********************************/
 function showReviews(reviews) {
-  REVIEW_GRID.innerHTML = '';
   reviews.map((review, index) => {
     elm = createReview(review, index);
     REVIEW_GRID.append(elm);
@@ -183,6 +184,7 @@ function createReview(review, index) {
 
   if (Math.floor(rating) !== rating) a.classList.add("half");
   a.href = review.link;
+  a.target = "_blank";
 
   // SLUG
   for (show in review.shows) {
@@ -247,6 +249,17 @@ function createReview(review, index) {
   review_more.append(arrow);
   a.append(review_more);
 
+  // Check Filters
+  let filters = getFilters();
+  if (filters.checked.length > 0) {
+    for (show in review.shows) {
+      console.log(review.shows[show].slug);
+      if (filters.unchecked.includes(review.shows[show].slug)) {
+        div.classList.add("hide");
+      }
+    }
+  }
+
   return div;
 }
 
@@ -255,15 +268,25 @@ function createReview(review, index) {
  * Find out if the loader is in view
  ********************************/
 function isLoaderInView() {
-  const rect = LOADER.getBoundingClientRect();
+  const rectTop = getOffsetTop(LOADER);
+  const scrollBottom = window.innerHeight + (window.pageYOffset || document.documentElement.scrollTop);
 
-  const windowHeight = (window.innerHeight || document.documentElement.clientHeight);
-  const windowWidth = (window.innerWidth || document.documentElement.clientWidth);
+  console.log(scrollBottom);
 
-  const vertInView = (rect.top <= windowHeight) && ((rect.top + rect.height) >= 0);
-  const horInView = (rect.left <= windowWidth) && ((rect.left + rect.width) >= 0);
+  return scrollBottom + window.innerHeight > rectTop;
+}
 
-  return (vertInView && horInView);
+/* Get top of element relative to document
+recursive function since offsetTop is a reference to the
+first relative parent */
+function getOffsetTop(elem) {
+  var offsetTop = 0;
+  do {
+    if (!isNaN(elem.offsetTop)) {
+      offsetTop += elem.offsetTop;
+    }
+  } while (elem = elem.offsetParent);
+  return offsetTop;
 }
 
 /********************************

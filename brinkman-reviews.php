@@ -34,7 +34,7 @@ function get_reviews( $data ) {
 
 	// setup query argument
 	$args = array(
-    "posts_per_page"   => 4,
+    "posts_per_page"   => 20,
     "paged"            => $data['page'],
     'post_type'        => 'reviews'
 	);
@@ -46,7 +46,7 @@ function get_reviews( $data ) {
 	foreach ($posts as $key => $post) {
       $posts[$key]->acf = get_fields($post->ID);
       $posts[$key]->review_date = date('F Y', strtotime(get_field('review_date', $post->ID, false, false)));
-			$posts[$key]->link = get_permalink($post->ID);
+			$posts[$key]->link = get_field('article_link', $post->ID, false, false);
 			$posts[$key]->image = get_the_post_thumbnail_url($post->ID);
 			$posts[$key]->shows = get_the_terms($post, 'shows');
 	}

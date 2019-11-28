@@ -231,7 +231,12 @@ function createReview(review, index) {
   a.append(review_rating);
 
   // REVIEW DATE
-  if (review.date && review.date.length > 0 && review.date.toUpperCase() !== 'JANUARY 1999') {
+  if (
+    review.date &&
+    review.date.length > 0 &&
+    review.date.toUpperCase() !== 'JANUARY 1999' &&
+    review.date.toUpperCase() !== 'JANUARY 1970'
+  ) {
     var review_date = document.createElement("span");
     review_date.classList.add("review__date");
     review_date.innerHTML = review.date;

@@ -46,7 +46,6 @@ function get_reviews( $data ) {
 
 	// add custom field data to posts array
 	foreach ($posts as $key => $post) {
-
       $posts[$key]->acf = get_fields($post->ID);
       $posts[$key]->review_date = date('F Y', strtotime(get_field('review_date', $post->ID, false, false)));
 			$posts[$key]->link = get_field('article_link', $post->ID, false, false);
@@ -86,7 +85,8 @@ function shortcode_review( $atts ) {
   $atts = shortcode_atts( array(
       'show' => '',
       'display' => 'simple',
-      'max_posts' => 30
+      'max_posts' => 30,
+      'wrapper_class' => 'review'
   ), $atts );
 
   if($atts['show'] === ''){
@@ -117,12 +117,17 @@ function shortcode_review( $atts ) {
   }
 
   ob_start();
-    while( $loop->have_posts() ) {
-        $loop->the_post();
+    if($atts['display'] === 'full') ?><div class="review-container"><?php
+      while( $loop->have_posts() ) {
+          $loop->the_post();
 
-      // Use the passed in template
-      require('templates/' . $atts['display'] . '.php');
+      if($atts['wrapper_class'] !== '') { ?><div class="<?php echo $atts['wrapper_class'] ?>"><?php }
+        require('templates/' . $atts['display'] . '.php');       // Use the passed in template
+      if($atts['wrapper_class'] !== '') { ?></div><?php }
 
+      }
+    if($atts['display'] === 'full'){
+      ?></div><?php
     }
   return ob_get_clean();
 

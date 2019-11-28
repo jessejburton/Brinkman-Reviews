@@ -53,7 +53,7 @@
     ?>
   </span>
 
-  <?php if(trim($review_date) !== ""){ ?>
+  <?php if(trim($review_date) !== "" && $review_date !== '01/01/1999'){ ?>
     <span class="review__date">
       <?php echo date('F Y', strtotime($review_date)); ?>
     </span>

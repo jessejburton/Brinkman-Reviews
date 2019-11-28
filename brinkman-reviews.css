@@ -59,14 +59,25 @@
   margin: 2.5rem 0;
 }
 
-.reviews-grid .review {
+.reviews-grid .review,
+.review-container .review {
   transition: all 1s ease;
 }
 
-.reviews-grid .review:hover {
+.reviews-grid .review:hover,
+.review-container .review:hover {
   transform: scale(1.02);
   box-shadow: 0 0 15px 0 rgba(0,0,0,.1);
 }
+
+/* Adjustments for short code */
+.review-container .review .review__quote {
+  font-size: 90%;
+}
+.review-container .review .review__link {
+  padding-bottom: 5px;
+}
+/* Adjustments for short code */
 
 .review__full {
   display: block;
@@ -248,6 +259,13 @@
   object-fit: cover;
   object-position: center;
   transform: translateY(-50%);
+}
+
+.review-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  column-gap: 25px;
+  row-gap: 25px;
 }
 
 /* LOADING BARS */

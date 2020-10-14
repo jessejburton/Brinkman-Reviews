@@ -96,7 +96,7 @@
 }
 
 .row-item-1 {
-  animation-delay: 0;
+  animation-delay: 0ms;
 }
 .row-item-2 {
   animation-delay: 300ms;
@@ -242,19 +242,21 @@
   position: relative;
   width: 100%;
   margin-bottom: .5rem;
+  background-color: #292929;
 }
 
 .review__thumbnail:after {
   content: '';
   display: block;
   padding-bottom: 100%;
-  background-color: black;
+  background-color: #292929;
 }
 
 .review__thumbnail img {
   position: absolute;
   top: 50%;
-  width: 100%;
+  left: 0;
+  width: 100%!important;
   height: 100%;
   object-fit: cover;
   object-position: center;
@@ -263,7 +265,7 @@
 
 .review-container {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   column-gap: 25px;
   row-gap: 25px;
 }
@@ -374,4 +376,5 @@
 #show_filters li input {
   display: none;
 }
+
 

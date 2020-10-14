@@ -10,7 +10,7 @@ Plugin URI: https://www.burtonmediainc.com/plugins/brinkmanreviews
 Description: A plugin created to add a shortcode for displaying reviews on the website
              bababrinkman.com. It currently requries Custom Post Type and Advanced
              Custom Fields plugin with some configuration as outlined on the website.
-Version: 1.0.0
+Version: 1.0.2
 Author: Jesse James Burton
 Author URI: https://www.burtonmediainc.com
 License: GPLv2 or Later
@@ -86,7 +86,10 @@ function shortcode_review( $atts ) {
       'show' => '',
       'display' => 'simple',
       'max_posts' => 30,
-      'wrapper_class' => 'review'
+      'wrapper_class' => 'review',
+      'exceptions' => '',
+      'sort' => 'review',
+      'order' => 'ASC'
   ), $atts );
 
   if($atts['show'] === ''){
@@ -94,6 +97,14 @@ function shortcode_review( $atts ) {
     $terms = get_terms( 'shows' );
     // convert array of term objects to array of term IDs
     $term_slugs = wp_list_pluck( $terms, 'slug' );
+
+    // Remove any exceptions that are passed in
+    foreach(explode(",", $atts['exceptions']) as $exception){
+      if (($key = array_search($exception, $term_slugs)) !== false) {
+          unset($term_slugs[$key]);
+      }
+    }
+
   } else {
     $term_slugs = array( sanitize_title( $atts['show'] ) );
   }
@@ -101,8 +112,9 @@ function shortcode_review( $atts ) {
   $loop = new WP_Query( array(
       'posts_per_page'    => sanitize_title( $atts['max_posts'] ),
       'post_type'         => 'reviews',
-      'orderby'           => 'menu_order title',
-      'order'             => 'ASC',
+      'meta_key'			    => 'review_date',
+      'orderby'           => $atts['sort'] === 'review' ? 'meta_value' : 'date',
+      'order'             => $atts['order'],
       'tax_query'         => array( array(
           'taxonomy'  => 'shows',
           'field'     => 'slug',
@@ -117,7 +129,10 @@ function shortcode_review( $atts ) {
   }
 
   ob_start();
-    if($atts['display'] === 'full') ?><div class="review-container"><?php
+    if($atts['display'] === 'full') {
+      ?><div class="review-container"><?php
+    }
+
       while( $loop->have_posts() ) {
           $loop->the_post();
 
@@ -156,7 +171,7 @@ add_filter('template_include', 'reviews_template');
 
 /* STARTING TO ADD FUNCTIONALITY FOR AJAX FILTERING */
 //Get show Filters
-function get_show_filters()
+function get_show_filters($exceptions = [])
 {
     $terms = get_terms('shows');
     $filters_html = false;
@@ -164,15 +179,15 @@ function get_show_filters()
     if( $terms ):
         $filters_html = '<ul id="show_filters">';
 
-        $filters_html .= '<li class="show-all"><input type="checkbox" id="term_all" checked><label for="term_all">All Shows</label></li>';
+        $filters_html .= '<li class="show-all"><input type="checkbox" id="term_all" checked><label for="term_all">All</label></li>';
 
         foreach( $terms as $term )
         {
-            $term_id = $term->term_id;
-            $term_name = $term->name;
-            $term_slug = $term->slug;
+          $term_id = $term->term_id;
+          $term_name = $term->name;
+          $term_slug = $term->slug;
 
-          if($term_name !== "FEATURED"){
+          if(!in_array($term_name, $exceptions)){
             $filters_html .= '<li class="filter term_id_'.$term_id.'"><input type="checkbox" name="show_filter[]" id="term_'.$term_id.'" value="'.$term_slug.'"><label for="term_'.$term_id.'">'.$term_name.'</label></li>';
           }
         }

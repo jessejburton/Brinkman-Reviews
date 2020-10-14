@@ -30,7 +30,7 @@ extract($fp_options);
        <h2>PRESS</h2>
 
        <div id="show-filters-containers">
-          <?php echo get_show_filters(); ?>
+          <?php echo get_show_filters(["RAP UP"]); ?>
        </div>
 
       <div class="reviews-grid"></div><!--/reviews-grid-->

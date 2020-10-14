@@ -9,6 +9,7 @@ let fetching = false;
 let all_reviews_loaded = false;
 let page = 1;
 let fetchedPages = [];
+let fetchInterval = null;
 
 // Check to see if the page has reviews to display
 if (REVIEW_GRID !== null) {
@@ -28,7 +29,8 @@ function initReviews() {
 
   // Check if we need to load more reviews
   checkLoadMore();
-  document.addEventListener("scroll", checkLoadMore);
+  //document.addEventListener("scroll", checkLoadMore);
+  fetchInterval = setInterval(checkLoadMore, 200);
 }
 
 function filterHandleChange() {
@@ -148,7 +150,8 @@ function getNextReviews() {
 }
 
 function allReviewsLoaded() {
-  document.removeEventListener("scroll", checkLoadMore);
+  //document.removeEventListener("scroll", checkLoadMore);
+  clearInterval(fetchInterval, 300);
   LOADER.style.display = "none";
   all_reviews_loaded = true;
 }
@@ -160,7 +163,13 @@ function allReviewsLoaded() {
 function showReviews(reviews) {
   reviews.map((review, index) => {
     elm = createReview(review, index);
-    REVIEW_GRID.append(elm);
+    if (elm) {
+      if(review.shows.find(show => show.name === "FEATURED")){
+        REVIEW_GRID.prepend(elm);
+      } else {
+        REVIEW_GRID.append(elm);
+      }
+    }
   });
 }
 
@@ -168,6 +177,9 @@ function showReviews(reviews) {
  * Return a formatted review element
  ********************************/
 function createReview(review, index) {
+  if(review.shows.find(review => review.name === "RAP UP") && review.shows.length === 1){
+    return null
+  }
   let rating = parseInt(review.star_rating);
   let type = rating > 0 ? "review" : "press";
 
@@ -294,7 +306,7 @@ function getOffsetTop(elem) {
  * be loaded
  ********************************/
 function checkLoadMore() {
-  if (isLoaderInView() && !fetching) {
+  if (!fetching) {
     getNextReviews();
   }
 }

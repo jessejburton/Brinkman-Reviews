@@ -1,30 +1,32 @@
 <?php
 
-/**
- * @package BrinkmanReviews
- *
-**/
 /*
-Plugin Name: Baba Brinkman Reviews
-Plugin URI: https://www.burtonmediainc.com/plugins/brinkmanreviews
-Description: A plugin created to add a shortcode for displaying reviews on the website
-             bababrinkman.com. It currently requries Custom Post Type and Advanced
-             Custom Fields plugin with some configuration as outlined on the website.
-Version: 1.0.2
-Author: Jesse James Burton
-Author URI: https://www.burtonmediainc.com
-License: GPLv2 or Later
-Text Domain: brinkman-reviews
-GIT: https://github.com/jessejburton/Brinkman-Reviews
+* Plugin Name: Baba Brinkman Videos
+* Plugin URI: https://www.burtonmediainc.com/plugins/brinkmanvideos (TODO)
+* Description: A plugin created to add a shortcode for displaying reviews
+* on the website bababrinkman.com. It currently requries Custom Post Type
+* and Advanced Custom Fields plugin with some configuration as outlined
+* on the website.
+*
+* Version: 2.0.0
+* Author: Jesse James Burton
+* Author URI: https://www.burtonmediainc.com
+* License: GPLv2 or Later
+* Text Domain: brinkman-videos
+* GIT: https://github.com/jessejburton/Brinkman-Reviews
 */
 
-/* Include Styles */
+/*
+ * Include Styles
+*/
 function add_review_plugin_styles() {
   wp_enqueue_style( 'brinkman-reviews-styles', plugins_url('brinkman-reviews.css',__FILE__ ), array(), '1.1', 'all');
 }
 add_action( 'wp_enqueue_scripts', 'add_review_plugin_styles' );
 
-/* Include Scripts */
+/*
+ * Include Scripts
+*/
 function add_review_plugin_script() {
   wp_enqueue_script( 'brinkman-reviews-scripts', plugins_url('brinkman-reviews.js',__FILE__ ), array(), '1.1', 'all', false);
 }
@@ -55,7 +57,9 @@ function get_reviews( $data ) {
 	return $posts;
 }
 
-// register the endpoint
+/*
+ * Register the Endpoint
+*/
 add_action( 'rest_api_init', function(){
 	register_rest_route( 'bababrinkman/v1', '/reviews/(?P<page>\d+)', array(
 		'methods' => 'GET',
@@ -63,20 +67,16 @@ add_action( 'rest_api_init', function(){
 	));
 });
 
-/**
+/*
  * Register review shortcode
- *
- * @return null
- */
+*/
 function burtonmedia_shortcodes() {
   add_shortcode( 'reviews', 'shortcode_review' );
 }
 add_action( 'init', 'burtonmedia_shortcodes' );
 
-/**
+/*
 * Review Shortcode Callback
-* @param Array $atts
-* @return string
 */
 function shortcode_review( $atts ) {
   global $wp_query,
@@ -150,10 +150,8 @@ function shortcode_review( $atts ) {
 
 }
 
-/**
+/*
 * add Review Archive template page
-* @param Array $atts
-* @return string
 */
 function reviews_template( $template ) {
   if ( is_post_type_archive('reviews') ) {
@@ -169,8 +167,9 @@ function reviews_template( $template ) {
 }
 add_filter('template_include', 'reviews_template');
 
-/* STARTING TO ADD FUNCTIONALITY FOR AJAX FILTERING */
-//Get show Filters
+/*
+* STARTING TO ADD FUNCTIONALITY FOR AJAX FILTERING
+*/
 function get_show_filters($exceptions = [])
 {
     $terms = get_terms('shows');
@@ -198,7 +197,9 @@ function get_show_filters($exceptions = [])
     endif;
 }
 
-/* UTILTIIES */
+/*
+* UTILITIES
+*/
 function lowDash($value){
   return strtolower(preg_replace('/[[:space:]]+/', '-', $value));
 }
